@@ -70,8 +70,6 @@ def word_sim(word1,part1,word2,part2):
         return wn.wup_similarity(synset1,synset2)
     return 0
 
-cat = wn.synsets('cat','n')[0]
-dog = wn.synsets('dog')[0]
 fd1=open("text1.txt")
 fd2=open("text2.txt")
 text1=fd1.read()
@@ -82,9 +80,10 @@ list_of_words1 = [word_tokenize(sentence) for sentence in
                   list_of_sentences1]  # actually list of list of words, first list is the first sentence,
 list_of_words2 = [word_tokenize(sentence) for sentence in
                   list_of_sentences2]  # first element in the inner list is the first word of the sencence
-roles_of_words1 = [tags_to_roles_of_speech(pos_tag(word)) for word in list_of_words1]
-roles_of_words2 = [tags_to_roles_of_speech(pos_tag(word)) for word in list_of_words2]
-
+print(pos_tag(list_of_words1[0]))
+roles_of_words1 = [tags_to_roles_of_speech(pos_tag(sentence)) for sentence in list_of_words1]
+roles_of_words2 = [tags_to_roles_of_speech(pos_tag(sentence)) for sentence in list_of_words2]
+print(roles_of_words1)
 print(basic_text_sim(list_of_words1, roles_of_words1, list_of_words2, roles_of_words2))
 
 
