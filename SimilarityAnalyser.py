@@ -8,15 +8,15 @@ from Tagger import Tagger
 
 
 class SimilarityAnalyser:
-    def __init__(self, text1, text2, size_penalty=0.2, displacement_penalty=0):
+    def __init__(self, text1, text2, size_penalty=0.2, displacement_penalty=0.05):
         self.text1 = text1
         self.text2 = text2
         self.size_penalty = size_penalty
         self.displacement_penalty = displacement_penalty
-
     @staticmethod
     def __create_list_of_sentences_from_text(text: str):
-        return re.split("[.;!?]", text)
+        temp = re.split("[.;!?]", text)
+        return [i for i in temp if len(i) > 0]
 
     @staticmethod
     def __get_sentence_from_index(text, index):
@@ -46,12 +46,16 @@ class SimilarityAnalyser:
         for i in range(l1):
             best_match = 0
             for j in range(l2):
-                sim = SimilarityAnalyser.__get_word_similarity(sentence1[i], tags1[i], sentence2[j], tags2[j]) / (
-                            1 + displacement_penalty * (abs(i - j) / max_distance))
+                if max_distance > 0:
+                    sim = SimilarityAnalyser.__get_word_similarity(sentence1[i], tags1[i], sentence2[j], tags2[j]) / (
+                                1 + displacement_penalty * (abs(i - j) / max_distance))
+                else:
+                    sim = SimilarityAnalyser.__get_word_similarity(sentence1[i], tags1[i], sentence2[j], tags2[j])
                 if best_match < sim:
                     best_match = sim
             sum += best_match
         size_discrepancy = abs(l1 - l2)
+        size_discrepancy_ratio=0
         size_discrepancy_ratio = size_discrepancy / min(l1, l2)
         return sum / l1 / (1 + size_discrepancy_ratio * size_penalty)
 
@@ -72,11 +76,12 @@ class SimilarityAnalyser:
             best_match = 0
             for j in range(l2):
                 sentence_similarity = SimilarityAnalyser.__get_sentence_similarity(list_of_sentences1[i],
-                                                                                   roles_of_sentences1[i],
-                                                                                   list_of_sentences2[j],
-                                                                                   roles_of_sentences2[j],
-                                                                                   self.size_penalty,
-                                                                                   self.displacement_penalty)
+                                                                                       roles_of_sentences1[i],
+                                                                                       list_of_sentences2[j],
+                                                                                       roles_of_sentences2[j],
+                                                                                       self.size_penalty,
+                                                                                       self.displacement_penalty)
+
                 if best_match < sentence_similarity:
                     best_match = sentence_similarity
             sum += best_match
@@ -181,7 +186,6 @@ class SimilarityAnalyser:
         list_of_sentences1 = SimilarityAnalyser.__create_list_of_sentences_from_text(text)
         list_of_list_of_words1 = [word_tokenize(sentence) for sentence in
                                   list_of_sentences1]  # actually list of list of words, first list is the first sentence
-        list_of_list_of_words1.pop()  # popping the last word because it's always empty
         list_of_list_of_roles_of_words1 = [Tagger.tags_to_roles_of_speech(pos_tag(sentence)) for sentence in
                                            list_of_list_of_words1]
         return list_of_list_of_words1, list_of_list_of_roles_of_words1
