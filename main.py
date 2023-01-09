@@ -1,13 +1,9 @@
 from FileReader import FileReader
 from SimilarityAnalyser import SimilarityAnalyser
 
-FILE1_NAME = "text1.txt"
-FILE2_NAME = "text2.txt"
-
-
 if __name__ == "__main__":
-    file_reader1 = FileReader(FILE1_NAME)
-    file_reader2 = FileReader(FILE2_NAME)
+    file_reader1 = FileReader("Choose the first file to be analysed")
+    file_reader2 = FileReader("Choose the second file to be analysed")
     similarity_analyzer = SimilarityAnalyser(file_reader1.read_file_content(), file_reader2.read_file_content())
     similarity_analyzer.show_semantic_distance_matrix_heatmap(file_reader1.read_file_content(), file_reader2.read_file_content())
     # print(similarity_analyzer.average_distance_all_cases())
