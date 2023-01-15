@@ -1,4 +1,6 @@
 import re
+
+import matplotlib
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -13,8 +15,10 @@ class SimilarityAnalyser:
         self.text2 = text2
         self.size_penalty = size_penalty
         self.displacement_penalty = displacement_penalty
+
     @staticmethod
     def __create_list_of_sentences_from_text(text: str):
+        # TODO: Split nltk
         temp = re.split("[.;!?]", text)
         return [i for i in temp if len(i) > 0]
 
@@ -48,14 +52,14 @@ class SimilarityAnalyser:
             for j in range(l2):
                 if max_distance > 0:
                     sim = SimilarityAnalyser.__get_word_similarity(sentence1[i], tags1[i], sentence2[j], tags2[j]) / (
-                                1 + displacement_penalty * (abs(i - j) / max_distance))
+                            1 + displacement_penalty * (abs(i - j) / max_distance))
                 else:
                     sim = SimilarityAnalyser.__get_word_similarity(sentence1[i], tags1[i], sentence2[j], tags2[j])
                 if best_match < sim:
                     best_match = sim
             sum += best_match
         size_discrepancy = abs(l1 - l2)
-        size_discrepancy_ratio=0
+        size_discrepancy_ratio = 0
         size_discrepancy_ratio = size_discrepancy / min(l1, l2)
         return sum / l1 / (1 + size_discrepancy_ratio * size_penalty)
 
@@ -76,11 +80,11 @@ class SimilarityAnalyser:
             best_match = 0
             for j in range(l2):
                 sentence_similarity = SimilarityAnalyser.__get_sentence_similarity(list_of_sentences1[i],
-                                                                                       roles_of_sentences1[i],
-                                                                                       list_of_sentences2[j],
-                                                                                       roles_of_sentences2[j],
-                                                                                       self.size_penalty,
-                                                                                       self.displacement_penalty)
+                                                                                   roles_of_sentences1[i],
+                                                                                   list_of_sentences2[j],
+                                                                                   roles_of_sentences2[j],
+                                                                                   self.size_penalty,
+                                                                                   self.displacement_penalty)
 
                 if best_match < sentence_similarity:
                     best_match = sentence_similarity
@@ -101,6 +105,119 @@ class SimilarityAnalyser:
             output.append(temp)
         return output
 
+    def heatmap(self, data, row_labels, col_labels, ax=None,
+                cbar_kw=None, cbarlabel="", **kwargs):
+        """
+        Create a heatmap from a numpy array and two lists of labels.
+
+        Parameters
+        ----------
+        data
+            A 2D numpy array of shape (M, N).
+        row_labels
+            A list or array of length M with the labels for the rows.
+        col_labels
+            A list or array of length N with the labels for the columns.
+        ax
+            A `matplotlib.axes.Axes` instance to which the heatmap is plotted.  If
+            not provided, use current axes or create a new one.  Optional.
+        cbar_kw
+            A dictionary with arguments to `matplotlib.Figure.colorbar`.  Optional.
+        cbarlabel
+            The label for the colorbar.  Optional.
+        **kwargs
+            All other arguments are forwarded to `imshow`.
+        """
+
+        if ax is None:
+            ax = plt.gca()
+
+        if cbar_kw is None:
+            cbar_kw = {}
+
+        # Plot the heatmap
+        im = ax.imshow(data, **kwargs)
+
+        # Create colorbar
+        cbar = ax.figure.colorbar(im, ax=ax, **cbar_kw)
+        cbar.ax.set_ylabel(cbarlabel, rotation=-90, va="bottom")
+
+        # Show all ticks and label them with the respective list entries.
+        ax.set_xticks(np.arange(data.shape[1]), labels=col_labels)
+        ax.set_yticks(np.arange(data.shape[0]), labels=row_labels)
+
+        # Rotate the tick labels and set their alignment.
+        plt.setp(ax.get_xticklabels(), rotation=0, ha="right",
+                 rotation_mode="anchor")
+
+        # Turn spines off and create white grid.
+        ax.spines[:].set_visible(False)
+
+        ax.set_xticks(np.arange(data.shape[1] + 1) - .5, minor=True)
+        ax.set_yticks(np.arange(data.shape[0] + 1) - .5, minor=True)
+        ax.grid(which="minor", color="w", linestyle='-', linewidth=3)
+        ax.tick_params(which="minor", bottom=False, left=False)
+
+        return im, cbar
+
+    def annotate_heatmap(self, im, data=None, valfmt="{x:.2f}",
+                         textcolors=("black", "white"),
+                         threshold=None, **textkw):
+        """
+        A function to annotate a heatmap.
+
+        Parameters
+        ----------
+        im
+            The AxesImage to be labeled.
+        data
+            Data used to annotate.  If None, the image's data is used.  Optional.
+        valfmt
+            The format of the annotations inside the heatmap.  This should either
+            use the string format method, e.g. "$ {x:.2f}", or be a
+            `matplotlib.ticker.Formatter`.  Optional.
+        textcolors
+            A pair of colors.  The first is used for values below a threshold,
+            the second for those above.  Optional.
+        threshold
+            Value in data units according to which the colors from textcolors are
+            applied.  If None (the default) uses the middle of the colormap as
+            separation.  Optional.
+        **kwargs
+            All other arguments are forwarded to each call to `text` used to create
+            the text labels.
+        """
+
+        if not isinstance(data, (list, np.ndarray)):
+            data = im.get_array()
+
+        # Normalize the threshold to the images color range.
+        if threshold is not None:
+            threshold = im.norm(threshold)
+        else:
+            threshold = im.norm(data.max()) / 2.
+
+        # Set default alignment to center, but allow it to be
+        # overwritten by textkw.
+        kw = dict(horizontalalignment="center",
+                  verticalalignment="center")
+        kw.update(textkw)
+
+        # Get the formatter in case a string is supplied
+        if isinstance(valfmt, str):
+            valfmt = matplotlib.ticker.StrMethodFormatter(valfmt)
+
+        # Loop over the data and create a `Text` for each "pixel".
+        # Change the text's color depending on the data.
+        texts = []
+        for i in range(data.shape[0]):
+            for j in range(data.shape[1]):
+                kw.update(color=textcolors[int(im.norm(data[i, j]) > threshold)])
+                text = im.axes.text(j, i, valfmt(data[i, j], None), **kw)
+                texts.append(text)
+
+        return texts
+
     def show_semantic_distance_matrix_heatmap(self, text1, text2):
         list_of_sentences1, roles_of_sentences1 = SimilarityAnalyser.__get_words_and_their_roles_from_text(text1)
         list_of_sentences2, roles_of_sentences2 = SimilarityAnalyser.__get_words_and_their_roles_from_text(text2)
@@ -110,15 +227,18 @@ class SimilarityAnalyser:
                                                                           roles_of_sentences2))
         labels1 = [i for i in range(len(list_of_sentences1))]
         labels2 = [i for i in range(len(list_of_sentences2))]
+
         fig, ax = plt.subplots()
-        im = ax.imshow(matrix)
-        ax.set_xticks(np.arange(len(list_of_sentences1)), labels=labels1)
-        ax.set_yticks(np.arange(len(list_of_sentences2)), labels=labels2)
-        plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
-        for i in range(len(list_of_sentences1)):
-            for j in range(len(list_of_sentences2)):
-                text = ax.text(j, i, round(matrix[i, j], 3), ha="center", va="center", color="w")
-        ax.set_title("The smallest values for the semantic distance between sentences")
+
+        im, cbar = self.heatmap(matrix, labels1, labels2, ax=ax,
+                                cmap="BuPu", cbarlabel="Similarity score")
+        texts = self.annotate_heatmap(im, valfmt="{x:.3f}")
+
+        ax.set_title("The smallest values for\n"
+                     "the semantic distance between sentences")
+        ax.set_xlabel("Sentences from file2")
+        ax.set_ylabel("Sentences from file1")
+
         fig.tight_layout()
         plt.show()
 

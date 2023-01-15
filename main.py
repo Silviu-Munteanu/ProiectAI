@@ -1,6 +1,9 @@
 from FileReader import FileReader
 from SimilarityAnalyser import SimilarityAnalyser
 
+
+# All the functions return the similarity of
+# the words/sentences/texts so the meaning is: 1-best match, 0-worst match
 if __name__ == "__main__":
     file_reader1 = FileReader("Choose the first file to be analysed")
     file_reader2 = FileReader("Choose the second file to be analysed")
