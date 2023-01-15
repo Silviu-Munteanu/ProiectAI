@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from nltk.corpus import wordnet as wn
-from nltk import word_tokenize, pos_tag
+from nltk import word_tokenize, pos_tag, sent_tokenize
 from Tagger import Tagger
 
 
@@ -18,9 +18,8 @@ class SimilarityAnalyser:
 
     @staticmethod
     def __create_list_of_sentences_from_text(text: str):
-        # TODO: Split nltk
-        temp = re.split("[.;!?]", text)
-        return [i for i in temp if len(i) > 0]
+        temp = sent_tokenize(text)
+        return [re.split("[.;!?]", i)[0] for i in temp if len(i) > 0]
 
     @staticmethod
     def __get_sentence_from_index(text, index):
