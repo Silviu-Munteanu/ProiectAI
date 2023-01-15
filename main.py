@@ -12,7 +12,7 @@ if __name__ == "__main__":
     print(similarity_analyzer.average_distance_after_greedy_assignation()[0])
     #print(similarity_analyzer.average_distance_after_greedy_assignation()[1])
     # print(similarity_analyzer.average_distance_after_greedy_assignation()[2])
-    print(similarity_analyzer.closest_to_similarity_score(0.3))
+    print(similarity_analyzer.closest_to_similarity_score(0.4))
     print(similarity_analyzer.get_text_similarity())
     similarity_analyzer.show_semantic_distance_matrix_heatmap(file_reader1.read_file_content(),
                                                               file_reader2.read_file_content())

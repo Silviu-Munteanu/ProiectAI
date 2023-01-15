@@ -233,8 +233,7 @@ class SimilarityAnalyser:
                                 cmap="BuPu", cbarlabel="Similarity score")
         texts = self.annotate_heatmap(im, valfmt="{x:.3f}")
 
-        ax.set_title("The smallest values for\n"
-                     "the semantic distance between sentences")
+        ax.set_title("Similarity between pairs of sentences")
         ax.set_xlabel("Sentences from file2")
         ax.set_ylabel("Sentences from file1")
 
