@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Text Similarity Analyser</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    <div id="header">
+      <h1 id="title">Text Similarity Analyser</h1>
+    </div>
+    <div id="content-container">
+      <div id="name-wrapper"><h1 class="lbl">Your Report</h1></div>
+      <div id="stats">
+        <div class="stat">{{ stat1 }}</div>
+        <div class="stat">{{ stat2 }}</div>
+        <div class="stat">{{ stat3 }}</div>
+        <div class="stat">{{ stat4 }}</div>
+      </div>
+      <div id="picture"><img src="/{{ fig }}" /></div>
+    </div>
+    <div id="footer"></div>
+  </body>
+  <script></script>
+  <style>
+    body {
+      background-color: rgb(253, 250, 229);
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: 7vh 90vh 3vh;
+      grid-template-areas:
+        "header"
+        "content-container"
+        "footer";
+      margin: 0;
+    }
+    #header {
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+      color: rgb(61, 46, 0);
+      grid-area: header;
+      background-color: rgb(255, 183, 0);
+      vertical-align: middle;
+      font-size: 1.5vh;
+    }
+    #content-container {
+      grid-area: content-container;
+      display: grid;
+      grid-template-columns: 0.5fr 5fr 5fr 0.5fr;
+      grid-template-rows: 0.5fr 5fr 0.5fr;
+      grid-template-areas:
+        ". nw nw ."
+        ". stats picture ."
+        ". . . .";
+      column-gap: 2vw;
+      row-gap: 1vh;
+    }
+    #name-wrapper {
+      grid-area: nw;
+      text-align: center;
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+      color: rgb(61, 46, 0);
+      font-size: 0.7em;
+      display: flex;
+      flex-direction: column;
+    }
+    .lbl {
+      margin-top: auto;
+    }
+    #stats {
+      grid-area: stats;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      column-gap: 2vw;
+      row-gap: 2vh;
+    }
+    .stat {
+      border-radius: 5px;
+      box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px,
+        rgba(0, 0, 0, 0.23) 0px 3px 6px;
+      background-color: white;
+    }
+    #picture {
+      grid-area: picture;
+    }
+    #footer {
+      grid: footer;
+      background-color: black;
+    }
+  </style>
+</html>

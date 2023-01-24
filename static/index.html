@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Text Similarity Analyser</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+
+  <body>
+    <div id="header">
+      <h1 id="title">Text Similarity Analyser</h1>
+    </div>
+    <div id="content-container">
+      <div class="name" id="name-1"><h1 class="lbl">Text #1</h1></div>
+      <div class="name" id="name-2"><h1 class="lbl">Text #2</h1></div>
+      <div class="text-wrapper" id="text-wrapper-1">
+        <textarea id="text-1" placeholder="Write your text here"></textarea>
+      </div>
+      <div class="text-wrapper" id="text-wrapper-2">
+        <textarea id="text-2" placeholder="Write your text here"></textarea>
+      </div>
+      <div id="btn-wrapper">
+        <button id="compare" onclick="compare()">Compare!</button>
+      </div>
+    </div>
+    <div id="footer"></div>
+  </body>
+  <script>
+    async function compare() {
+      text1 = document.getElementById("text-1").value;
+      text2 = document.getElementById("text-2").value;
+      res = await fetch("/compare", {
+        method: "POST",
+        mode: "cors",
+        body: JSON.stringify({
+          text_1: text1,
+          text_2: text2,
+        }),
+      });
+      text = await res.text();
+      document.open();
+      document.write(text);
+      document.close();
+    }
+  </script>
+  <style>
+    body {
+      background-color: rgb(253, 250, 229);
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: 7vh 90vh 3vh;
+      grid-template-areas:
+        "header"
+        "content-container"
+        "footer";
+      margin: 0;
+    }
+    #header {
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+      color: rgb(61, 46, 0);
+      grid-area: header;
+      background-color: rgb(255, 183, 0);
+      vertical-align: middle;
+      font-size: 1.5vh;
+    }
+
+    #content-container {
+      grid-area: content-container;
+      display: grid;
+      grid-template-columns: 1fr 5fr 5fr 1fr;
+      grid-template-rows: 1fr 5fr 1fr;
+      grid-template-areas:
+        ". name1 name2 . "
+        ". tw1 tw2 . "
+        ". btn btn . ";
+      column-gap: 3vw;
+      row-gap: 10px;
+    }
+    #name-1 {
+      grid-area: name1;
+    }
+    #name-2 {
+      grid-area: name2;
+    }
+    .name {
+      text-align: center;
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+      color: rgb(61, 46, 0);
+      font-size: 0.6em;
+      display: flex;
+      flex-direction: column;
+    }
+    .lbl {
+      margin-top: auto;
+    }
+    #text-wrapper-1 {
+      grid-area: tw1;
+    }
+    #text-wrapper-2 {
+      grid-area: tw2;
+    }
+    .text-wrapper {
+      border-radius: 5px;
+      box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px,
+        rgba(0, 0, 0, 0.23) 0px 3px 6px;
+      background-color: white;
+    }
+    textarea {
+      background: transparent;
+      outline: none;
+      border: none;
+      resize: none;
+      border-radius: 25px;
+      width: 99%;
+      height: 99%;
+      font-size: 1.5em;
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+    ::-webkit-input-placeholder {
+      text-align: center;
+    }
+    :-moz-placeholder {
+      text-align: center;
+    }
+    ::-moz-placeholder {
+      text-align: center;
+    }
+    :-ms-input-placeholder {
+      color: red;
+      text-align: center;
+    }
+    #btn-wrapper {
+      grid-area: btn;
+      position: relative;
+    }
+    #compare {
+      margin: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+      background-color: rgb(255, 183, 0);
+      border-radius: 10px;
+      border: 1px solid rgb(204, 146, 0);
+      display: inline-block;
+      cursor: pointer;
+      color: #ffffff;
+      font-family: Arial;
+      font-size: 23px;
+      padding: 16px 31px;
+      text-decoration: none;
+      text-shadow: 0px 1px 0px #2f6627;
+    }
+    #compare:hover {
+      background-color: rgb(127, 91, 0);
+    }
+    #compare:active {
+      opacity: 0.8;
+    }
+    #footer {
+      grid: footer;
+      background-color: black;
+    }
+  </style>
+</html>

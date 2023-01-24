@@ -239,6 +239,29 @@ class SimilarityAnalyser:
 
         fig.tight_layout()
         plt.show()
+    
+    def save_semantic_distance_matrix_heatmap(self, text1, text2, path):
+        list_of_sentences1, roles_of_sentences1 = SimilarityAnalyser.__get_words_and_their_roles_from_text(text1)
+        list_of_sentences2, roles_of_sentences2 = SimilarityAnalyser.__get_words_and_their_roles_from_text(text2)
+        matrix = np.array(SimilarityAnalyser.get_semantic_distance_matrix(self, list_of_sentences1,
+                                                                          roles_of_sentences1,
+                                                                          list_of_sentences2,
+                                                                          roles_of_sentences2))
+        labels1 = [i for i in range(len(list_of_sentences1))]
+        labels2 = [i for i in range(len(list_of_sentences2))]
+
+        fig, ax = plt.subplots()
+
+        im, cbar = self.heatmap(matrix, labels1, labels2, ax=ax,
+                                cmap="BuPu", cbarlabel="Similarity score")
+        texts = self.annotate_heatmap(im, valfmt="{x:.3f}")
+
+        ax.set_title("Similarity between pairs of sentences")
+        ax.set_xlabel("Sentences from file2")
+        ax.set_ylabel("Sentences from file1")
+
+        fig.tight_layout()
+        plt.savefig(path)
 
     def average_distance_all_cases(self):
         list_of_sentences1, roles_of_sentences1 = SimilarityAnalyser.__get_words_and_their_roles_from_text(self.text1)
