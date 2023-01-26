@@ -20,17 +20,22 @@ def compare():
     dp = float(request.args.get('dp'))
 
     similarity_analyzer = SimilarityAnalyser(data['text_1'], data['text_2'], sp, dp)
-    stat1 = int(similarity_analyzer.average_distance_all_cases())
-    stat2 = int(similarity_analyzer.average_distance_after_greedy_assignation()[0])
+    stat1 = (int(similarity_analyzer.average_distance_all_cases()),
+             "Explicatie pt stat1")
+    stat2 = (int(similarity_analyzer.average_distance_after_greedy_assignation()[0]),
+             "Explicatie pt stat2")
+    stat4 = (int(similarity_analyzer.get_text_similarity()),
+             "Explicatie pt stat4")
     # stat3 = int(similarity_analyzer.closest_to_similarity_score(0.4)
-    stat4 = int(similarity_analyzer.get_text_similarity())
+    additional_stats = [stat1, stat2, stat4]
 
     matrix, prop_text_1, prop_text_2 = similarity_analyzer.get_semantic_distance_matrix_heatmap(data['text_1'],
                                                                                                 data['text_2'])
     prop_text_1 = [' '.join(prop) for prop in prop_text_1]
     prop_text_2 = [' '.join(prop) for prop in prop_text_2]
-    
-    return render_template("report.html", stat1=stat1, stat2=stat2, stat4=stat4, matrix=matrix, prop_text_1=prop_text_1,
+
+    return render_template("report.html", additional_stats=additional_stats, matrix=matrix,
+                           prop_text_1=prop_text_1,
                            prop_text_2=prop_text_2)
 
 
