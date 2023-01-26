@@ -16,10 +16,10 @@
       <div id="name-wrapper"><h1 class="lbl">Your Report</h1></div>
       <div id="stats">
         {% for stat in additional_stats %}
-        <div class="card rounded-4 p-3" style="width: 18rem;">
-          
+        <div class="card rounded-4 p-3 shadow p-3 mb-5 bg-body rounded" style="width: 18rem;">
+
             <div id="progress">
-                <div data-num="{{ stat[0]*100 }}" class="progress-item">sd</div>
+                <div data-num="{{ stat[0]*100 }}" class="progress-item shadow">sd</div>
             </div>
 
           <div class="card-body">
