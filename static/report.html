@@ -16,13 +16,20 @@
       <div id="name-wrapper"><h1 class="lbl">Your Report</h1></div>
       <div id="stats">
         {% for stat in additional_stats %}
-        <div class="card rounded-4 p-2" style="width: 18rem;">
+        <div class="card rounded-4 p-3" style="width: 18rem;">
+          
             <div id="progress">
                 <div data-num="{{ stat[0]*100 }}" class="progress-item">sd</div>
             </div>
+
           <div class="card-body">
-            <p class="card-text">{{ stat[1] }}</p>
+            <img src="/static/icons8-question-mark-50.png" class="card-img-top" alt="?" tabindex="0"
+               role="button" data-bs-toggle="popover" data-bs-trigger="focus"
+               data-bs-title="{{ stat[2] }}"
+              data-bs-content="{{ stat[1] }}">
+            <h5 class="card-title">{{ stat[2] }}</h5>
           </div>
+
         </div>
         {% endfor %}
       </div>
@@ -32,6 +39,9 @@
     </div>
     <div id="footer"></div>
   </body>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+          integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+          crossorigin="anonymous"></script>
   <script
     type="text/javascript"
     src="/Chart.HeatMap-0.0.1-alpha/dst/Chart.HeatMap.S.js"
@@ -40,6 +50,9 @@
           integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
           crossorigin="anonymous"></script>
   <script>
+    const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
+    const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
+
     matrix = {{ matrix|tojson }};
     sentances_1 = {{ prop_text_1|tojson  }};
     sentances_2 = {{ prop_text_2|tojson }};
@@ -180,6 +193,10 @@
       background: white;
       font-size: 1rem;
       text-align: center;
+    }
+    .card-img-top {
+      height: 50px;
+      width: 50px;
     }
   </style>
 </html>
