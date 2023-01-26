@@ -27,9 +27,9 @@ def compare():
 
     matrix, prop_text_1, prop_text_2 = similarity_analyzer.get_semantic_distance_matrix_heatmap(data['text_1'],
                                                                                                 data['text_2'])
-    prop_text_1 = [prop[0] for prop in prop_text_1]
-    prop_text_2 = [prop[0] for prop in prop_text_2]
-
+    prop_text_1 = [' '.join(prop) for prop in prop_text_1]
+    prop_text_2 = [' '.join(prop) for prop in prop_text_2]
+    
     return render_template("report.html", stat1=stat1, stat2=stat2, stat4=stat4, matrix=matrix, prop_text_1=prop_text_1,
                            prop_text_2=prop_text_2)
 
