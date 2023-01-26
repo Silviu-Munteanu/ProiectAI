@@ -71,6 +71,7 @@
     canvas.height = height / 2;
     console.log(labels, datasets);
     var newChart = new Chart(ctx).HeatMap({labels:labels, datasets:datasets});
+
     let items = document.querySelectorAll('.progress-item');
     const counters = Array(items.length);
     const intervals = Array(items.length);
@@ -81,10 +82,11 @@
                   clearInterval(intervals[index]);
               }else{
                   counters[index] += 1;
-                  number.style.background = "conic-gradient(red calc(" + counters[index] + "%), gray 0deg)";
-                  number.setAttribute('data-value', counters[index] + "%");
-                  number.innerHTML = counters[index] + "%";
               }
+
+              number.style.background = "conic-gradient(red calc(" + counters[index] + "%), gray 0deg)";
+              number.setAttribute('data-value', counters[index] + "%");
+              number.innerHTML = counters[index] + "%";
       }, 15);
      });
   </script>
@@ -153,6 +155,7 @@
       grid: footer;
       background-color: black;
     }
+
     #progress{
       display: flex;
       justify-content: space-around;
