@@ -2386,7 +2386,7 @@ var ColorManager = function(){
     labelFontColor: "rgba(0,0,0,0.5)",
 
     // String - tooltipTemplate
-    tooltipTemplate: "<%= xLabel %> | <%= yLabel %> : <%= value %>",
+    tooltipTemplate: "<%= prop1 %> | <%= prop2 %> | Score: <%= value %>",
     
     // String - template for legend generation
     legendTemplate : '<div class="<%= name.toLowerCase() %>-legend">'+
@@ -2576,10 +2576,14 @@ var ColorManager = function(){
 				this.datasets.push(datasetObject);
         this.yLabels.push(dataset.label);
 
-				helpers.each(dataset.data,function(dataPoint,index){
+				helpers.each(dataset.data,function(dataTuple,index){
+					console.log(dataPoint, index);
+					var dataPoint = dataTuple[0]
 					datasetObject.boxes.push(new this.BoxClass({
 						value : dataPoint,
 						label : this.xLabels[index],
+						prop1: dataTuple[1],
+						prop2: dataTuple[2],
 						datasetLabel: dataset.label,
 						strokeColor : this.options.strokeColor,
 						fillColor : 'white',
@@ -2827,6 +2831,8 @@ var ColorManager = function(){
         var tooltipVariables = {
           yLabel: Element.datasetLabel,
           xLabel: Element.label,
+		  prop1: Element.prop1,
+		  prop2: Element.prop2,
           value: Element.value
         };
 

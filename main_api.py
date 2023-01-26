@@ -7,9 +7,11 @@ app = Flask(__name__, template_folder='static')
 
 CORS(app)
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 @app.route('/compare', methods=['POST'])
 def compare():
@@ -23,20 +25,24 @@ def compare():
     # stat3 = int(similarity_analyzer.closest_to_similarity_score(0.4)
     stat4 = int(similarity_analyzer.get_text_similarity())
 
-    matrix, prop_text_1, prop_text_2 = similarity_analyzer.get_semantic_distance_matrix_heatmap(data['text_1'], data['text_2'])
+    matrix, prop_text_1, prop_text_2 = similarity_analyzer.get_semantic_distance_matrix_heatmap(data['text_1'],
+                                                                                                data['text_2'])
     prop_text_1 = [prop[0] for prop in prop_text_1]
     prop_text_2 = [prop[0] for prop in prop_text_2]
-    
-    return render_template("report.html", stat1=stat1, stat2=stat2, stat4=stat4, matrix = matrix, prop_text_1=prop_text_1, prop_text_2=prop_text_2)   
+
+    return render_template("report.html", stat1=stat1, stat2=stat2, stat4=stat4, matrix=matrix, prop_text_1=prop_text_1,
+                           prop_text_2=prop_text_2)
+
 
 @app.route('/template')
 def template():
     return render_template('report.html')
 
+
 @app.route('/Chart.HeatMap-0.0.1-alpha/dst/Chart.HeatMap.S.js')
 def chartlib():
     return open("./Chart.HeatMap-0.0.1-alpha/dst/Chart.HeatMap.S.js", "r").read()
 
+
 if __name__ == "__main__":
     app.run(debug=True)
-
