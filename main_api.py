@@ -14,29 +14,28 @@ def index():
 @app.route('/compare', methods=['POST'])
 def compare():
     data = json.loads(request.data)
-    
-    similarity_analyzer = SimilarityAnalyser(data['text_1'], data['text_2'])
-    stat1 = similarity_analyzer.average_distance_all_cases()
-    stat2 = similarity_analyzer.average_distance_after_greedy_assignation()[0]
-    stat3 = similarity_analyzer.closest_to_similarity_score(0.4)
-    stat4 = similarity_analyzer.get_text_similarity()
-    
-    figid = str(uuid.uuid1())
-    savepath = "./static/figs/" + figid + ".png"
-    similarity_analyzer.save_semantic_distance_matrix_heatmap(data['text_1'], data['text_2'], savepath)
+    sp = float(request.args.get('sp'))
+    dp = float(request.args.get('dp'))
 
-    return render_template("report.html", stat1=stat1, stat2=stat2, stat3=stat3, stat4=stat4, fig=figid+".png")
+    similarity_analyzer = SimilarityAnalyser(data['text_1'], data['text_2'], sp, dp)
+    stat1 = int(similarity_analyzer.average_distance_all_cases())
+    stat2 = int(similarity_analyzer.average_distance_after_greedy_assignation()[0])
+    # stat3 = int(similarity_analyzer.closest_to_similarity_score(0.4)
+    stat4 = int(similarity_analyzer.get_text_similarity())
 
-@app.route('/<path:path>')
-def fig(path):
-    if ".png" in path:
-        return send_file(os.path.join("./static/figs", path), mimetype='image/gif')
+    matrix, prop_text_1, prop_text_2 = similarity_analyzer.get_semantic_distance_matrix_heatmap(data['text_1'], data['text_2'])
+    prop_text_1 = [prop[0] for prop in prop_text_1]
+    prop_text_2 = [prop[0] for prop in prop_text_2]
     
+    return render_template("report.html", stat1=stat1, stat2=stat2, stat4=stat4, matrix = matrix, prop_text_1=prop_text_1, prop_text_2=prop_text_2)   
 
 @app.route('/template')
 def template():
     return render_template('report.html')
 
+@app.route('/Chart.HeatMap-0.0.1-alpha/dst/Chart.HeatMap.S.js')
+def chartlib():
+    return open("./Chart.HeatMap-0.0.1-alpha/dst/Chart.HeatMap.S.js", "r").read()
 
 if __name__ == "__main__":
     app.run(debug=True)

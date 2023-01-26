@@ -13,16 +13,52 @@
     <div id="content-container">
       <div id="name-wrapper"><h1 class="lbl">Your Report</h1></div>
       <div id="stats">
-        <div class="stat">{{ stat1 }}</div>
+        <div class="stat">{{ stat1}}</div>
         <div class="stat">{{ stat2 }}</div>
-        <div class="stat">{{ stat3 }}</div>
         <div class="stat">{{ stat4 }}</div>
       </div>
-      <div id="picture"><img src="/{{ fig }}" /></div>
+      <div id="picture">
+        <canvas id="heatmap"></canvas>
+      </div>
     </div>
     <div id="footer"></div>
   </body>
-  <script></script>
+  <script
+    type="text/javascript"
+    src="/Chart.HeatMap-0.0.1-alpha/dst/Chart.HeatMap.S.js"
+  ></script>
+  <script>
+    matrix = {{ matrix|tojson }};
+    sentances_1 = {{ prop_text_1|tojson  }};
+    sentances_2 = {{ prop_text_2|tojson }};
+
+    labels = []
+    datasets = []
+
+    for(i = 0 ; i < sentances_1.length; i++){
+      labels.push(i)
+    }
+    for(i = 0 ; i < sentances_2.length; i++){
+      data = []
+      for(j = 0; j < sentances_1.length; j++){
+        data.push((matrix[j][i] * 100).toFixed(0))
+      }
+      datasets.push({
+        label: i,
+        data: data
+      })
+    }
+
+    var ctx = document.getElementById("heatmap").getContext("2d");
+    var canvas = document.getElementById("heatmap");
+
+    width = document.documentElement.clientWidth;
+    height = document.documentElement.clientHeight;
+
+    canvas.width = width / 2;
+    canvas.height = height / 2;
+    var newChart = new Chart(ctx).HeatMap({labels:labels, datasets:datasets});
+  </script>
   <style>
     body {
       background-color: rgb(253, 250, 229);

@@ -263,6 +263,16 @@ class SimilarityAnalyser:
         fig.tight_layout()
         plt.savefig(path)
 
+    def get_semantic_distance_matrix_heatmap(self, text1, text2):
+        list_of_sentences1, roles_of_sentences1 = SimilarityAnalyser.__get_words_and_their_roles_from_text(text1)
+        list_of_sentences2, roles_of_sentences2 = SimilarityAnalyser.__get_words_and_their_roles_from_text(text2)
+        
+        return (self.get_semantic_distance_matrix(list_of_sentences1,
+                                                roles_of_sentences1,
+                                                list_of_sentences2,
+                                                roles_of_sentences2), list_of_sentences1,list_of_sentences2)
+
+
     def average_distance_all_cases(self):
         list_of_sentences1, roles_of_sentences1 = SimilarityAnalyser.__get_words_and_their_roles_from_text(self.text1)
         list_of_sentences2, roles_of_sentences2 = SimilarityAnalyser.__get_words_and_their_roles_from_text(self.text2)
