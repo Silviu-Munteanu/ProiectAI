@@ -7,10 +7,16 @@ app = Flask(__name__, template_folder='static')
 
 CORS(app)
 
-
+theme_colors = {
+    "primary": "#FFC107",
+    "secondary": "#F7FFF7",
+    "tertiary": "#2F3061",
+    "tertiary2": "#6CA6C1",
+    "text": "#343434"
+}
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', colors=theme_colors)
 
 
 @app.route('/compare', methods=['POST'])
@@ -47,7 +53,7 @@ def compare():
     prop_text_1 = [' '.join(prop) for prop in prop_text_1]
     prop_text_2 = [' '.join(prop) for prop in prop_text_2]
 
-    return render_template("report.html", additional_stats=additional_stats, matrix=matrix,
+    return render_template("report.html", colors=theme_colors, additional_stats=additional_stats, matrix=matrix,
                            prop_text_1=prop_text_1,
                            prop_text_2=prop_text_2)
 
