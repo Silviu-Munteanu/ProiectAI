@@ -48,7 +48,7 @@
     for(i = 0 ; i < sentances_2.length; i++){
       data = []
       for(j = 0; j < sentances_1.length; j++){
-        data.push([(matrix[j][i] * 100).toFixed(0), sentances_1[j], sentances_2[i]])
+        data.push([Math.trunc( (matrix[j][i] * 100) ), sentances_1[j], sentances_2[i]])
       }
       datasets.push({
         label: i,
@@ -64,7 +64,6 @@
 
     canvas.width = width / 2;
     canvas.height = height / 2;
-    console.log(labels, datasets);
     var newChart = new Chart(ctx).HeatMap({labels:labels, datasets:datasets});
 
     let items = document.querySelectorAll('.progress-item');

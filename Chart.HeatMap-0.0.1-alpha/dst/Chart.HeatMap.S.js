@@ -2577,7 +2577,6 @@ var ColorManager = function(){
         this.yLabels.push(dataset.label);
 
 				helpers.each(dataset.data,function(dataTuple,index){
-					console.log(dataPoint, index);
 					var dataPoint = dataTuple[0]
 					datasetObject.boxes.push(new this.BoxClass({
 						value : dataPoint,

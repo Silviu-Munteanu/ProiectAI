@@ -26,17 +26,17 @@ def compare():
     dp = float(request.args.get('dp'))
 
     similarity_analyzer = SimilarityAnalyser(data['text_1'], data['text_2'], sp, dp)
-    stat1 = (int(similarity_analyzer.average_distance_all_cases()),
+    stat1 = (float(similarity_analyzer.average_distance_all_cases()),
              "After computing the distance between every pair of sentences, returns the average.",
              "Average distance")
-    stat2 = (int(similarity_analyzer.average_distance_after_greedy_assignation()[0]),
+    stat2 = (float(similarity_analyzer.average_distance_after_greedy_assignation()[0]),
              "Computes the similarity scores between all posible sentences in "
              "the 2 pieces of text. Based on these scores, it maches the pair(one "
              "from the first text, the second one from the second text) with the "
              "best score and removes them from the pool. This process repeats "
              "until the maximum number of matches is achieved. Returns the average of these assignations",
              "Average distance after greedy assignation")
-    stat4 = (int(similarity_analyzer.get_text_similarity()),
+    stat4 = (float(similarity_analyzer.get_text_similarity()),
              "Minimum distance: Computes the average between the best matches "
              "of the first sentence in the second and the best matches of the "
              "second sentence in the first one. size penalty : penalizes "

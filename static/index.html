@@ -14,9 +14,7 @@
       <div id="btn-wrapper">
         <button id="compare" onclick="compare()">Compare!</button>
         <div id="slider-wrapper">
-          <label id="l_size_penalty" for="size_penalty"
-            >Size Penalty : 0.5</label
-          >
+
           <input
             name="size_penalty"
             id="size_penalty"
@@ -24,21 +22,25 @@
             min="0.0"
             max="1.0"
             step="0.1"
-            value="0.5"
+            value="0.2"
           />
-          <br />
-          <label id="l_displacement_penalty" for="displacement_penalty"
-            >Displacement Penalty : 0.5</label
+          <label id="l_size_penalty" for="size_penalty"
+          >Size Penalty : 0.2</label
           >
+          <br />
+
           <input
             name="displacement_penalty"
             id="displacement_penalty"
             type="range"
             min="0.0"
             max="1.0"
-            step="0.1"
-            value="0.5"
+            step="0.05"
+            value="0.05"
           />
+          <label id="l_displacement_penalty" for="displacement_penalty"
+          >Displacement Penalty : 0.05</label
+          >
         </div>
       </div>
     </div>
