@@ -31,6 +31,8 @@ class SimilarityAnalyser:
 
     @staticmethod
     def __get_word_similarity(word1, part1, word2, part2):
+        if word1 == word2 and part1 == part2:
+            return 1
         synset1 = wn.synsets(word1, part1)
         synset2 = wn.synsets(word2, part2)
         if synset1 and synset2:
